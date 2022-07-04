@@ -71,8 +71,9 @@ class QuestionBankAdapter implements QuestionBankContract
             'id' => $questionValues->id,
             'title' => $questionValues->title,
             'questionCount' => property_exists($questionValues, 'questionCount') ? (int) $questionValues->questionCount : null,
-            'owner_id' => $questionValues->ownerId
+            'ownerId' => $questionValues->ownerId,
         ]);
+
         $questionset->addMetadata($this->transformMetadata($questionValues->metadata));
         return $questionset;
     }
@@ -87,7 +88,7 @@ class QuestionBankAdapter implements QuestionBankContract
             'id' => $questionValues->id,
             'text' => $questionValues->title,
             'questionSetId' => $questionValues->questionSetId,
-            'owner_id' => $questionValues->ownerId
+            'ownerId' => $questionValues->ownerId
         ]);
         $question->addMetadata($this->transformMetadata($questionValues->metadata));
         return $question;
@@ -208,7 +209,7 @@ class QuestionBankAdapter implements QuestionBankContract
         $questionsetStructure = (object) [
             'title' => $questionset->title,
             'metadata' => $questionset->getMetadata(),
-            'owner_id' => $questionset->ownerId
+            'ownerId' => $questionset->ownerId
         ];
 
         $response = $this->client->request("POST", self::QUESTIONSETS, ['json' => $questionsetStructure]);
@@ -231,7 +232,7 @@ class QuestionBankAdapter implements QuestionBankContract
         $questionsetStructure = (object) [
             'title' => $questionset->title,
             'metadata' => $questionset->getMetadata(),
-            'owner_id' => $questionset->ownerId
+            'ownerId' => $questionset->ownerId
         ];
 
         $response = $this->client->request("PUT", sprintf(self::QUESTIONSET, $questionset->id), ['json' => $questionsetStructure]);
@@ -361,7 +362,7 @@ class QuestionBankAdapter implements QuestionBankContract
         $questionStructure = (object) [
             'title' => $questionText,
             'metadata' => $question->getMetadata(),
-            'owner_id' => $question->ownerId
+            'ownerId' => $question->ownerId
         ];
 
         $response = $this->client->request("POST", sprintf(self::QUESTIONSET_QUESTIONS, $question->questionSetId), ['json' => $questionStructure]);
@@ -386,7 +387,7 @@ class QuestionBankAdapter implements QuestionBankContract
         $questionStructure = (object) [
             'title' => $questionText,
             'metadata' => $question->getMetadata(),
-            'owner_id' => $question->ownerId
+            'ownerId' => $question->ownerId
         ];
 
         $response = $this->client->request("PUT", sprintf(self::QUESTION, $question->id), ['json' => $questionStructure]);
