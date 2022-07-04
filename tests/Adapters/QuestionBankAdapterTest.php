@@ -52,9 +52,10 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function getQuestionsets_twoSets_thenSuccess()
     {
+        $ownerId = $this->faker->uuid;
         $client = $this->getClient([
             new Response(StatusCode::OK, [],
-                '[{"metadata": {"keywords": ["progress"],"images": []},"id": "c2197f7c-668d-4464-b645-cb4068f7eade","title": "QS progress"},{"metadata": {"keywords": ["test"],"images": []},"id": "dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title": "QS inmaking"}]'),
+                '[{"metadata": {"keywords": ["progress"],"images": []},"id": "c2197f7c-668d-4464-b645-cb4068f7eade","title": "QS progress","ownerId": "' . $ownerId . '"},{"metadata": {"keywords": ["test"],"images": []},"id": "dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title": "QS inmaking","ownerId": "' . $ownerId . '"}]'),
         ]);
 
         $adapter = $this->getMockBuilder(QuestionBankAdapter::class)
@@ -76,9 +77,10 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function getQuestionsetWithoutQuestions()
     {
+        $ownerId = $this->faker->uuid;
         $client = $this->getClient([
             new Response(StatusCode::OK, [],
-                '{"metadata": {"keywords": ["progress"],"images": []},"id": "c2197f7c-668d-4464-b645-cb4068f7eade","title": "QS progress"}'),
+                '{"metadata": {"keywords": ["progress"],"images": []},"id": "c2197f7c-668d-4464-b645-cb4068f7eade","title": "QS progress","ownerId":"' . $ownerId . '"}'),
         ]);
 
         /** @var ClientInterface $client */
@@ -94,9 +96,10 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function getQuestionsetWithQuestions()
     {
+        $ownerId = $this->faker->uuid;
         $client = $this->getClient([
             new Response(StatusCode::OK, [],
-                '{"questionCount": 1, "metadata": {"keywords": ["progress"],"images": []},"id": "c2197f7c-668d-4464-b645-cb4068f7eade","title": "QS progress"}'),
+                '{"questionCount": 1, "metadata": {"keywords": ["progress"],"images": []},"id": "c2197f7c-668d-4464-b645-cb4068f7eade","title": "QS progress","ownerId":"' . $ownerId . '"}'),
         ]);
 
         $adapter = $this->getMockBuilder(QuestionBankAdapter::class)
@@ -133,9 +136,10 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function getQuestions_threeQuestions_thenSuccess()
     {
+        $ownerId = $this->faker->uuid;
         $client = $this->getClient([
             new Response(StatusCode::OK, [],
-                '[{"metadata":{"keywords":[],"images": []},"id":"37a3ebce-002c-4e74-b611-0cb6e2e91515","questionSetId":"dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title":"QS progress 3"},{"metadata":{"keywords":["progress2"],"images": []},"id":"6bdeda3c-1169-47c5-b173-782e7f36f9fc","questionSetId":"dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title":"QS progress 2"},{"metadata":{"keywords":["testquestion"],"images": []},"id":"a184acf1-4c78-4f43-9a44-aad294dcc146","questionSetId":"dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title":"QS question"}]'),
+                '[{"metadata":{"keywords":[],"images": []},"id":"37a3ebce-002c-4e74-b611-0cb6e2e91515","questionSetId":"dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title":"QS progress 3","ownerId": "' . $ownerId . '"},{"metadata":{"keywords":["progress2"],"images": []},"id":"6bdeda3c-1169-47c5-b173-782e7f36f9fc","questionSetId":"dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title":"QS progress 2","ownerId": "' . $ownerId . '"},{"metadata":{"keywords":["testquestion"],"images": []},"id":"a184acf1-4c78-4f43-9a44-aad294dcc146","questionSetId":"dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title":"QS question","ownerId": "' . $ownerId . '"}]'),
         ]);
 
         $adapter = $this->getMockBuilder(QuestionBankAdapter::class)
@@ -157,9 +161,10 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function getQuestionWithAnswers()
     {
+        $ownerId = $this->faker->uuid;
         $client = $this->getClient([
             new Response(StatusCode::OK, [],
-                '{"metadata":{"keywords":[],"images": []},"id":"37a3ebce-002c-4e74-b611-0cb6e2e91515","questionSetId":"dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title":"Existing question"}'),
+                '{"metadata":{"keywords":[],"images": []},"id":"37a3ebce-002c-4e74-b611-0cb6e2e91515","questionSetId":"dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title":"Existing question","ownerId":"' . $ownerId . '"}'),
         ]);
 
         $adapter = $this->getMockBuilder(QuestionBankAdapter::class)
@@ -181,9 +186,10 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function getQuestionWithoutAnswers()
     {
+        $ownerId = $this->faker->uuid;
         $client = $this->getClient([
             new Response(StatusCode::OK, [],
-                '{"metadata":{"keywords":[],"images": []},"id":"37a3ebce-002c-4e74-b611-0cb6e2e91515","questionSetId":"dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title":"Existing question"}'),
+                '{"metadata":{"keywords":[],"images": []},"id":"37a3ebce-002c-4e74-b611-0cb6e2e91515","questionSetId":"dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title":"Existing question","ownerId":"' . $ownerId . '"}'),
         ]);
 
         $adapter = $this->getMockBuilder(QuestionBankAdapter::class)
@@ -255,9 +261,10 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function createQuestionset()
     {
+        $ownerId = $this->faker->uuid;
         $client = $this->getClient([
             new Response(StatusCode::OK, [],
-                '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"New Questionset"}'),
+                '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"New Questionset","ownerId":"' . $ownerId . '"}'),
         ]);
 
         /** @var ClientInterface $client */
@@ -274,9 +281,10 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function createQuestion()
     {
+        $ownerId = $this->faker->uuid;
         $client = $this->getClient([
             new Response(StatusCode::OK, [],
-                '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"New Question","questionSetId":"cebfd105-d5e5-4158-9568-2f8a1252ccb4"}'),
+                '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"New Question","questionSetId":"cebfd105-d5e5-4158-9568-2f8a1252ccb4","ownerId":"' . $ownerId . '"}'),
         ]);
 
         /** @var ClientInterface $client */
@@ -295,13 +303,16 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
     public function createQuestionWithMath()
     {
         $questionsetId = $this->faker->uuid;
+        $ownerId = $this->faker->uuid;
         $questionText = '<p>Albert Einstein formula: <span class="math_container">\(E=mc^2\)</span></p>';
         $question = QuestionDataObject::create($questionText, $questionsetId);
+        $question->ownerId = $ownerId;
 
         $expectedParams = [
             'json' => (object) [
                 'title' => '<p>Albert Einstein formula: $$E=mc^2$$</p>',
                 'metadata' => MetadataDataObject::create(),
+                'ownerId' => $ownerId,
             ],
         ];
 
@@ -309,13 +320,14 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
             ->setMethods(['request'])
             ->getMock();
 
+
         $client
             ->expects($this->once())
             ->method('request')
             ->with("POST", sprintf(QuestionBankAdapter::QUESTIONSET_QUESTIONS, $questionsetId), $expectedParams)
             ->willReturn(
                 new Response(StatusCode::OK, [],
-                    '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"<p>Albert Einstein formula: $$E=mc^2$$<\/p>","questionSetId":"cebfd105-d5e5-4158-9568-2f8a1252ccb4"}')
+                    '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"<p>Albert Einstein formula: $$E=mc^2$$<\/p>","questionSetId":"cebfd105-d5e5-4158-9568-2f8a1252ccb4","ownerId": "' . $ownerId . '"}')
             );
 
         /** @var ClientInterface $client */
@@ -325,6 +337,7 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
         $this->assertEquals('<p>Albert Einstein formula: $$E=mc^2$$</p>', $savedQuestion->text);
         $this->assertEquals('d8884054-5fb4-4f4e-9fd6-6bceb85ee57d', $savedQuestion->id);
         $this->assertEquals('cebfd105-d5e5-4158-9568-2f8a1252ccb4', $savedQuestion->questionSetId);
+        $this->assertEquals($ownerId, $savedQuestion->ownerId);
         $this->assertTrue($savedQuestion->wasRecentlyCreated);
     }
 
@@ -333,15 +346,18 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function createQuestionWithMathWithoutReplacment()
     {
+        $ownerId = $this->faker->uuid;
         $questionsetId = $this->faker->uuid;
         $questionText = '<p>Albert Einstein formula: <span class="math_container">\(E=mc^2\)</span></p>';
         $question = QuestionDataObject::create($questionText, $questionsetId);
         $question->stripMathContainerElements = false;
+        $question->ownerId = $ownerId;
 
         $expectedParams = [
             'json' => (object) [
                 'title' => $questionText,
                 'metadata' => MetadataDataObject::create(),
+                'ownerId' => $ownerId,
             ],
         ];
 
@@ -355,7 +371,7 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
             ->with("POST", sprintf(QuestionBankAdapter::QUESTIONSET_QUESTIONS, $questionsetId), $expectedParams)
             ->willReturn(
                 new Response(StatusCode::OK, [],
-                    '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"<p>Albert Einstein formula: <span class=\"math_container\">\\\(E=mc^2\\\)<\/span><\/p>","questionSetId":"cebfd105-d5e5-4158-9568-2f8a1252ccb4"}')
+                    '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"<p>Albert Einstein formula: <span class=\"math_container\">\\\(E=mc^2\\\)<\/span><\/p>","questionSetId":"cebfd105-d5e5-4158-9568-2f8a1252ccb4","ownerId": "' . $ownerId . '"}')
             );
 
         /** @var ClientInterface $client */
@@ -365,6 +381,7 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
         $this->assertEquals($questionText, $savedQuestion->text);
         $this->assertEquals('d8884054-5fb4-4f4e-9fd6-6bceb85ee57d', $savedQuestion->id);
         $this->assertEquals('cebfd105-d5e5-4158-9568-2f8a1252ccb4', $savedQuestion->questionSetId);
+        $this->assertEquals($ownerId, $savedQuestion->ownerId);
         $this->assertTrue($savedQuestion->wasRecentlyCreated);
     }
 
@@ -392,9 +409,10 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function updateQuestionset()
     {
+        $ownerId = $this->faker->uuid;
         $client = $this->getClient([
             new Response(StatusCode::OK, [],
-                '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"Updated Questionset"}'),
+                '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"Updated Questionset","ownerId":"' . $ownerId . '"}'),
         ]);
 
         /** @var ClientInterface $client */
@@ -410,9 +428,10 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function updateQuestion()
     {
+        $ownerId = $this->faker->uuid;
         $client = $this->getClient([
             new Response(StatusCode::OK, [],
-                '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"Updated Question","questionSetId":"cebfd105-d5e5-4158-9568-2f8a1252ccb4"}'),
+                '{"metadata":{"keywords":[],"images": []},"id":"d8884054-5fb4-4f4e-9fd6-6bceb85ee57d","title":"Updated Question","questionSetId":"cebfd105-d5e5-4158-9568-2f8a1252ccb4","ownerId":"' . $ownerId . '"}'),
         ]);
 
         /** @var ClientInterface $client */
@@ -448,12 +467,13 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function getQuestionsetsWithSearch()
     {
+        $ownerId = $this->faker->uuid;
         /** @var ClientInterface $client */
         $client = $this->createMock(ClientInterface::class);
         $client->method("request")
             ->with("GET", QuestionBankAdapter::QUESTIONSETS, ['query' => ['search' => 'Nytt']])
             ->willReturn(new Response(StatusCode::OK, [],
-                '[{"metadata":{"keywords":[],"images": []},"id":"cda71174-2d82-439a-bd4a-343e982cdaa9","title":"Nytt på nytt"},{"metadata":{"keywords":[],"images": []},"id":"b9da2705-4e8f-4d43-bb28-93bb3ba9d215","title":"Helt nytt"}]'));
+                '[{"metadata":{"keywords":[],"images": []},"id":"cda71174-2d82-439a-bd4a-343e982cdaa9","title":"Nytt på nytt","ownerId": "' . $ownerId . '"},{"metadata":{"keywords":[],"images": []},"id":"b9da2705-4e8f-4d43-bb28-93bb3ba9d215","title":"Helt nytt","ownerId":"' . $ownerId . '"}]'));
 
         $search = SearchDataObject::create('search', 'Nytt');
         /** @var QuestionBankAdapter $adapter */
@@ -468,7 +488,7 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
         $client->method("request")
             ->with("GET", QuestionBankAdapter::QUESTIONSETS, ['query' => ['search' => 'Nytt på']])
             ->willReturn(new Response(StatusCode::OK, [],
-                '[{"metadata":{"keywords":[],"images": []},"id":"cda71174-2d82-439a-bd4a-343e982cdaa9","title":"Nytt på nytt"}]'));
+                '[{"metadata":{"keywords":[],"images": []},"id":"cda71174-2d82-439a-bd4a-343e982cdaa9","title":"Nytt på nytt","ownerId":"' . $ownerId . '"}]'));
 
         $search = SearchDataObject::create('search', 'Nytt på');
         /** @var QuestionBankAdapter $adapter */
@@ -539,9 +559,10 @@ class QuestionBankAdapterTest extends QuestionBankTestCase
      */
     public function getQuestionsWithSearch()
     {
+        $ownerId = $this->faker->uuid;
         $client = $this->getClient([
             new Response(StatusCode::OK, [],
-                '[{"metadata": {"keywords": [],"images": []},"id": "6bdeda3c-1169-47c5-b173-782e7f36f9fc","questionSetId": "dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title": "Updated question"}]'),
+                '[{"metadata": {"keywords": [],"images": []},"id": "6bdeda3c-1169-47c5-b173-782e7f36f9fc","questionSetId": "dd4c2d2f-6490-4611-9be8-df5d1c7c6eb2","title": "Updated question","ownerId":"' . $ownerId . '"}]'),
             new Response(StatusCode::OK, [],
                 '[{"metadata":{"keywords":[],"images": []},"id":"7b937904-adfc-417a-bb7c-b9a7ad576709","questionId":"6bdeda3c-1169-47c5-b173-782e7f36f9fc","description":"Answer 1","correctness":0},{"metadata":{"keywords":["testanswer"],"images": []},"id":"cebcf2f0-b233-4615-ac65-70d1af015f9a","questionId":"6bdeda3c-1169-47c5-b173-782e7f36f9fc","description":"Answer 2","correctness":100}]'),
             new Response(StatusCode::OK, [], '[]'),
