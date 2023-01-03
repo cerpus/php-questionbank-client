@@ -43,4 +43,8 @@ interface QuestionBankContract
     public function searchAnswers($searchParams) :Collection;
 
     public function stripMathContainer($haystack) :string;
+
+    public function storeQuestionSetV2(\stdClass $questionSet) :\stdClass;
+
+    public function searchV2(string $search, array $keywords, bool $includeQuestions, bool $includeAnswers) :Collection;
 }

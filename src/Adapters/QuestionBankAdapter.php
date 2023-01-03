@@ -11,9 +11,12 @@ use Cerpus\QuestionBankClient\DataObjects\SearchDataObject;
 use Cerpus\QuestionBankClient\Exceptions\InvalidSearchParametersException;
 use Exception;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\RequestOptions;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Log;
 
@@ -39,6 +42,11 @@ class QuestionBankAdapter implements QuestionBankContract
     const QUESTION_ANSWERS = '/v1/questions/%s/answers';
     const ANSWERS = '/v1/answers';
     const ANSWER = '/v1/answers/%s';
+
+    const V2QUESTIONSETS = '/v2/question_sets';
+    const V2QUESTIONSET = '/v2/question_sets/%s';
+
+    const SEARCHV2 = '/v2/search';
 
     /**
      * QuestionBankAdapter constructor.
@@ -88,7 +96,7 @@ class QuestionBankAdapter implements QuestionBankContract
             'id' => $questionValues->id,
             'text' => $questionValues->title,
             'questionSetId' => $questionValues->questionSetId,
-            'ownerId' => $questionValues->ownerId
+            'ownerId' => $questionValues->ownerId,
         ]);
         $question->addMetadata($this->transformMetadata($questionValues->metadata));
         return $question;
@@ -151,7 +159,7 @@ class QuestionBankAdapter implements QuestionBankContract
     {
         $additionalParameters = ! is_null($search) ? $this->traverseSearch($search) : [];
         $response = $this->client->request("GET", self::QUESTIONSETS, $additionalParameters);
-        $data = collect(\GuzzleHttp\json_decode($response->getBody()));
+        $data = collect(json_decode($response->getBody()));
         $questionsets = $data->map(function ($questionset) {
             return $this->mapQuestionsetResponseToDataObject($questionset);
         });
@@ -209,7 +217,7 @@ class QuestionBankAdapter implements QuestionBankContract
         $questionsetStructure = (object) [
             'title' => $questionset->title,
             'metadata' => $questionset->getMetadata(),
-            'ownerId' => $questionset->ownerId
+            'ownerId' => $questionset->ownerId,
         ];
 
         $response = $this->client->request("POST", self::QUESTIONSETS, ['json' => $questionsetStructure]);
@@ -232,7 +240,7 @@ class QuestionBankAdapter implements QuestionBankContract
         $questionsetStructure = (object) [
             'title' => $questionset->title,
             'metadata' => $questionset->getMetadata(),
-            'ownerId' => $questionset->ownerId
+            'ownerId' => $questionset->ownerId,
         ];
 
         $response = $this->client->request("PUT", sprintf(self::QUESTIONSET, $questionset->id), ['json' => $questionsetStructure]);
@@ -362,7 +370,7 @@ class QuestionBankAdapter implements QuestionBankContract
         $questionStructure = (object) [
             'title' => $questionText,
             'metadata' => $question->getMetadata(),
-            'ownerId' => $question->ownerId
+            'ownerId' => $question->ownerId,
         ];
 
         $response = $this->client->request("POST", sprintf(self::QUESTIONSET_QUESTIONS, $question->questionSetId), ['json' => $questionStructure]);
@@ -387,7 +395,7 @@ class QuestionBankAdapter implements QuestionBankContract
         $questionStructure = (object) [
             'title' => $questionText,
             'metadata' => $question->getMetadata(),
-            'ownerId' => $question->ownerId
+            'ownerId' => $question->ownerId,
         ];
 
         $response = $this->client->request("PUT", sprintf(self::QUESTION, $question->id), ['json' => $questionStructure]);
@@ -556,5 +564,86 @@ class QuestionBankAdapter implements QuestionBankContract
         ];
         $replace = '\\\\\\\\( $1 \\\\\\\\)';
         return preg_replace($pattern, $replace, $text);
+    }
+
+    /**
+     * @param  \stdClass  $questionSet
+     * @return \stdClass
+     */
+    public function storeQuestionSetV2(\stdClass $questionSet) :\stdClass
+    {
+        if (empty($questionSet->id)) {
+            $response = $this->createQuestionSetV2($questionSet);
+        } else {
+            $response = $this->updateQuestionSetV2($questionSet);
+        }
+
+        $questionsetResponse = json_decode($response->getBody());
+
+        return $questionsetResponse;
+    }
+
+    protected function createQuestionSetV2(\stdClass $questionSet)
+    {
+        return $this->client->post(self::V2QUESTIONSETS, [
+            RequestOptions::JSON => $questionSet,
+        ]);
+    }
+
+    protected function updateQuestionSetV2(\stdClass $questionSet)
+    {
+        try {
+            return $this->client->patch(sprintf(self::V2QUESTIONSET, $questionSet->id), [
+                RequestOptions::JSON => $questionSet,
+            ]);
+        } catch (ClientException $e) {
+            if ($e->getCode() === Response::HTTP_NOT_FOUND) {
+                unset($questionSet->id);
+                return $this->createQuestionSetV2($questionSet);
+            }
+
+            throw $e;
+        }
+    }
+
+    /**
+     * @param  string  $search
+     * @param  array  $keywords
+     * @param  bool  $includeQuestions
+     * @param  bool  $includeAnswers
+     * @return Collection
+     * @throws GuzzleException
+     * @throws InvalidSearchParametersException
+     */
+    public function searchV2(?string $search = '', ?array $keywords = [], bool $includeQuestions = true, bool $includeAnswers = true) :Collection
+    {
+        if (! $search && empty($keywords)) {
+            return collect([]);
+        }
+
+        $searchQuery = [
+            'includeQuestions' => $includeQuestions,
+            'includeAnswers' => $includeAnswers,
+        ];
+
+        if ($search) {
+            $searchQuery['search'] = $search;
+        }
+
+        if ($keywords) {
+            $searchQuery['keywords'] = $keywords;
+        }
+
+        $response = $this->client->post(self::SEARCHV2, [
+            RequestOptions::JSON => $searchQuery,
+        ]);
+
+        $data = collect(json_decode($response->getBody()));
+
+        $questionsets = $data->map(function ($questionset) {
+            return $this->mapQuestionsetResponseToDataObject($questionset);
+        });
+
+        return $questionsets;
     }
 }
