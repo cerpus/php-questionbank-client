@@ -25,4 +25,28 @@ trait MetadataTrait
     {
         return $this->metadata;
     }
+
+
+    /**
+     * @return array
+     */
+    public function getImages()
+    {
+        if (! empty($this->metadata->images)) {
+            return $this->metadata->images;
+        }
+        return [];
+    }
+
+    /**
+     * @param $index
+     * @return string|null
+     */
+    public function getImageAt($index)
+    {
+        if (! empty($this->metadata->images[$index])) {
+            return $this->metadata->images[$index];
+        }
+        return null;
+    }
 }
