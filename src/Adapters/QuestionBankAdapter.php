@@ -408,7 +408,7 @@ class QuestionBankAdapter implements QuestionBankContract
      */
     public function deleteQuestion($questionId)
     {
-        // TODO: Implement deleteQuestion() method.
+        $this->client->request("DELETE", sprintf(self::QUESTION, $questionId));
     }
 
     /**
@@ -504,7 +504,7 @@ class QuestionBankAdapter implements QuestionBankContract
      */
     public function deleteAnswer($answerId)
     {
-        // TODO: Implement deleteAnswer() method.
+        $this->client->request("DELETE", sprintf(self::ANSWER, $answerId));
     }
 
 
