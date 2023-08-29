@@ -66,6 +66,8 @@ class QuestionBankAdapter implements QuestionBankContract
         return MetadataDataObject::create([
             'keywords' => $metadata->keywords,
             'images' => $metadata->images,
+            /*'languages' => $metadata->languages,
+            'subjects' => $metadata->subjects*/
         ]);
     }
 

@@ -14,4 +14,7 @@ use Cerpus\Helper\Traits\CreateTrait;
 class MetadataDataObject
 {
     public $keywords = [];
+    public array $languages = [];
+    public array $subject = [];
+    public array $age_levels = [];
 }
