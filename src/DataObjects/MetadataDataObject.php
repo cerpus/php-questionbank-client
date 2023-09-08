@@ -17,4 +17,7 @@ class MetadataDataObject
 
     public $keywords = [];
     public $images = [];
+    public array $languages = [];
+    public array $subjects = [];
+    public array $age_levels = [];
 }
