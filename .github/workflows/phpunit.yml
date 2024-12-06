@@ -54,7 +54,6 @@ jobs:
                         --prefer-dist
                         --optimize-autoloader
                         --with illuminate/support:${{ matrix.laravel-constraint }}
-                        --with guzzlehttp/guzzle:${{ matrix.guzzle-constraint }}
 
             -   name: Run PHPUnit
                 run: vendor/bin/phpunit --coverage-clover=clover.xml
